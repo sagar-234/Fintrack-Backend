@@ -28,9 +28,22 @@ public List<User> getAllUsers(){
 }
 
     public User updateUser(Long id,User user){
-    return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found" + id));
+    User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found" + id));
+
+    existingUser.setUsername(user.getUsername());
+    existingUser.setEmail(user.getEmail());
+    existingUser.setPassword(user.getPassword());
+    existingUser.setRole(user.getRole());
+
+    return userRepository.save(existingUser);
     }
 
+    public void deleteUser(Long id){
+    if (!userRepository.existsById(id)){
+        throw new RuntimeException("User does not exists" + id);
+    }
+    userRepository.deleteById(id);
+    }
 
 
 
